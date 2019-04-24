@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import iful.edu.bg.model.Establishment;
 
-public interface EstablishmentRepository extends MongoRepository<Establishment, Long> {
+public interface EstablishmentRepository extends MongoRepository<Establishment, String> {
 
 	Optional<Establishment> findByEmail(String email);
 }

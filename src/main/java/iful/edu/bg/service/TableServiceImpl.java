@@ -2,59 +2,73 @@ package iful.edu.bg.service;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import iful.edu.bg.dao.TableDAOImpl;
 import iful.edu.bg.enums.TableStatuses;
 import iful.edu.bg.model.Establishment;
 import iful.edu.bg.model.Table;
+import iful.edu.bg.repository.TableRepository;
 
 @Service
 public class TableServiceImpl implements TableService {
 
 	@Autowired
-	private TableDAOImpl tableDAOImpl;
+	private TableRepository tableRepository;
+
+	@Autowired
+	private EstablishmentServiceImpl establishmentServiceImpl;
 
 	@Override
-	public void createTable(Table table, Principal principal) throws Exception {
-		tableDAOImpl.createTable(table, principal);
+	public Table getTableById(String id) throws Exception {
+		Optional<Table> table = tableRepository.findById(id);
+		if (table.isPresent())
+			return table.get();
+		else
+			throw new Exception("Not found");
 	}
 
 	@Override
-	public void updateTable(Establishment estb, Table table) {
-		tableDAOImpl.updateTable(estb, table);
-
+	public List<Table> getTableListByEstb(String id) throws Exception {
+		Establishment estb = establishmentServiceImpl.findById(id);
+		return tableRepository.findAllByEstb(estb);
 	}
 
 	@Override
-	public Table getTableById(long id) throws Exception {
-		return tableDAOImpl.getTableById(id);
-	}
-
-	@Override
-	public List<Table> getTableListByEstb(Principal principal) throws Exception {
-		// TODO Auto-generated method stub
-		return tableDAOImpl.getTableListByEstb(principal);
-	}
-
-	@Override
-	public Table getEstbTableByNum(Establishment estb, int tableNum) {
-		// TODO Auto-generated method stub
-		return tableDAOImpl.getEstbTableByNum(estb, tableNum);
+	public Table getEstbTableById(String id) throws Exception {
+		Optional<Table> table = tableRepository.findById(id);
+		if(table.isPresent())
+			return table.get();
+		else throw new Exception("Not found");
 	}
 
 	@Override
 	public Table getEstbTableBySeats(Establishment estb, int seats) {
-		// TODO Auto-generated method stub
-		return tableDAOImpl.getEstbTableBySeats(estb, seats);
+		return tableRepository.findByEstbAndSeats(estb, seats);
 	}
 
 	@Override
 	public List<Table> getEstbTableListByStatus(Principal principal, TableStatuses status) throws Exception {
-		// TODO Auto-generated method stub
-		return tableDAOImpl.getEstbTableListByStatus(principal, status);
+		Establishment establishment = establishmentServiceImpl.findById(principal.getName());
+		return tableRepository.findAllByEstbAndStatus(establishment, status);
+	}
+
+	@Override
+	public void createTable(Table table, String id) throws Exception {
+//		Establishment establishment = establishmentServiceImpl.findById(id);
+//		table.setEstb(establishment);
+//		TableStatus ts = tableStatusRepository.findByStatus(TableStatuses.BUSY.toString());
+//		table.setStatus(ts);
+//		tableRepository.save(table);
+	}
+
+	@Override
+	public void updateTable(Establishment estb, Table table) throws Exception {
+		Table oldTable = getEstbTableById(table.get_id());
+		table.set_id(oldTable.get_id());
+		tableRepository.save(table);
 	}
 
 }

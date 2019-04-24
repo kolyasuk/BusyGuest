@@ -1,8 +1,6 @@
 package iful.edu.bg.config;
 
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +16,12 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 
+import iful.edu.bg.enums.Reputations;
+import iful.edu.bg.enums.Roles;
+import iful.edu.bg.model.Reputation;
 import iful.edu.bg.model.Role;
 import iful.edu.bg.model.User;
+import iful.edu.bg.repository.ReputationRepository;
 import iful.edu.bg.repository.RoleRepository;
 import iful.edu.bg.repository.UserRepository;
 
@@ -29,6 +31,8 @@ import iful.edu.bg.repository.UserRepository;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private RoleRepository roleRepository;
+	@Autowired
+	private ReputationRepository reputationRepository;
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -39,11 +43,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.antMatcher("/**").authorizeRequests().antMatchers("/", "/login**", "/js/**", "/error**").permitAll().
 			antMatchers("/visitor/**").hasAuthority("VISITOR").
-			antMatchers("/admin/**").hasRole("ADMIN").
-			antMatchers("/estb/**").hasRole("ESTB").
-			anyRequest().authenticated().
-			and().
-			logout().logoutSuccessUrl("/").permitAll().
+			antMatchers("/admin/**").hasAuthority("ADMIN").
+			antMatchers("/estb/**").hasAuthority("ESTB").
+			anyRequest().authenticated().and()
+            .logout().logoutSuccessUrl("/").permitAll().
 			and().csrf().disable();
 	}
 
@@ -54,15 +57,23 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 			User user = userRepository.findById(id).orElseGet(() -> {
 				User newUser = new User();
-				Role visitorRole = roleRepository.findByRole("VISITOR");
+				Role visitorRole = roleRepository.findByName(Roles.VISITOR);
 				
-				newUser.setRoles(new HashSet<Role>(Arrays.asList(visitorRole)));
+				if(visitorRole.getName().equals(Roles.VISITOR)) {
+					Reputation reputation = new Reputation(null, Reputations.UNRELIABLE, 0, 0);
+					newUser.setReputation(reputationRepository.save(reputation));
+					newUser.setPhone("");
+				}
+				
+				newUser.setRole(visitorRole);
 				newUser.setId(id);
 				newUser.setName((String) map.get("name"));
 				newUser.setEmail((String) map.get("email"));
 				newUser.setGender((String) map.get("gender"));
 				newUser.setLocale((String) map.get("locale"));
 				newUser.setUserpic((String) map.get("picture"));
+
+
 
 				return newUser;
 			});
@@ -79,8 +90,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		    Optional<User> user = userRepository.findById(id);
 		    if(!user.isPresent())
 		    	return Collections.<GrantedAuthority> emptyList();
-
-		    return AuthorityUtils.createAuthorityList(user.get().getRoles().stream().map(role -> role.getRole()).toArray(String[]::new));
+		    return AuthorityUtils.createAuthorityList(user.get().getRole().getName().toString());
 
 		};
 	}

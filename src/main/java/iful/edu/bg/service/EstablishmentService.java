@@ -9,7 +9,7 @@ public interface EstablishmentService {
 
 	List<Establishment> getEstablishmentList();
 
-	Establishment findByEmail(String email) throws Exception;
+	Establishment findById(String id) throws Exception;
 
 	Establishment createEstablishment(Establishment establishment/* , String accountEmail */);
 

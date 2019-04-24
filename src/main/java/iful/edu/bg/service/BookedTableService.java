@@ -1,14 +1,21 @@
 package iful.edu.bg.service;
 
-import java.security.Principal;
 import java.util.List;
 
 import iful.edu.bg.model.BookedTable;
 
 public interface BookedTableService {
 
-	void createBookedTable(BookedTable bookedTable);
+	BookedTable createBookedTable(BookedTable bookedTable);
 
-	List<BookedTable> getActualBookedTableByTableNum(Principal principal, int tableNum) throws Exception;
+	List<BookedTable> getActualBookedTableByTableId(String id) throws Exception;
+	
+	BookedTable getBookedTableById(String id) throws Exception;
+	
+	List<BookedTable> getBookedTableByUserId(String id) throws Exception;
+	
+	void deleteBookedTable(String id);
+	
+	boolean checkActualBookedTableByEstablishmentId(String userId, String estbId) throws Exception;
 
 }

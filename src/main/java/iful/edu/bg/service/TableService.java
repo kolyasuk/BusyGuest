@@ -9,15 +9,15 @@ import iful.edu.bg.model.Table;
 
 public interface TableService {
 
-	void createTable(Table table, Principal principal) throws Exception;
+	void createTable(Table table, String email) throws Exception;
 
-	void updateTable(Establishment estb, Table table);
+	void updateTable(Establishment estb, Table table) throws Exception;
 
-	Table getTableById(long id) throws Exception;
+	Table getTableById(String id) throws Exception;
 
-	List<Table> getTableListByEstb(Principal principa) throws Exception;
+	List<Table> getTableListByEstb(String email) throws Exception;
 
-	Table getEstbTableByNum(Establishment estb, int tableNum);
+	Table getEstbTableById(String id) throws Exception;
 
 	Table getEstbTableBySeats(Establishment estb, int seats);
 
