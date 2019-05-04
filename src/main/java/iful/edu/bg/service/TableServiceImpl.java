@@ -4,6 +4,7 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,19 +57,15 @@ public class TableServiceImpl implements TableService {
 	}
 
 	@Override
-	public void createTable(Table table, String id) throws Exception {
-//		Establishment establishment = establishmentServiceImpl.findById(id);
-//		table.setEstb(establishment);
-//		TableStatus ts = tableStatusRepository.findByStatus(TableStatuses.BUSY.toString());
-//		table.setStatus(ts);
-//		tableRepository.save(table);
+	public Table createTable(Table table) throws Exception {
+		table.setStatus(TableStatuses.FREE);
+		return tableRepository.save(table);
 	}
 
 	@Override
-	public void updateTable(Establishment estb, Table table) throws Exception {
-		Table oldTable = getEstbTableById(table.get_id());
-		table.set_id(oldTable.get_id());
-		tableRepository.save(table);
+	public Table updateTable(Table tableFromDB, Table table) throws Exception {
+		BeanUtils.copyProperties(table, tableFromDB, "id"); 
+		return tableRepository.save(tableFromDB);
 	}
 
 }

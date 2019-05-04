@@ -40,8 +40,8 @@ public class BookedTable {
 	@JsonView(Views.FullData.class)
 	private String comment;
 	
-	@JsonView(Views.FullData.class)
-	private boolean status;
+	@JsonView(Views.Id.class)
+	private boolean accepted;
 	
 	@JsonView(Views.FullData.class)
 	private boolean done;

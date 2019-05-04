@@ -13,6 +13,6 @@ public interface EstablishmentService {
 
 	Establishment createEstablishment(Establishment establishment/* , String accountEmail */);
 
-	void updateEstablishment(Establishment establishment, String accountEmail);
+	Establishment updateEstablishment(Establishment establishmentFromDB, Establishment establishment);
 
 }

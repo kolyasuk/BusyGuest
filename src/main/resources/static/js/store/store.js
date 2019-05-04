@@ -12,14 +12,10 @@ export default new Vuex.Store({
         profile: frontendData.profile,
         role: frontendData.role,
         userBookedTables:[],
-        tableIndexToShow: -1,
     },
     mutations: {
         addPhoneMutation(state, profile) {
             state.profile = profile
-        },
-        changeTableIndex(state, index){
-            state.tableIndexToShow=index
         },
         getUserBookedTablesMutation(state, userBookedTables){
         	state.userBookedTables = userBookedTables

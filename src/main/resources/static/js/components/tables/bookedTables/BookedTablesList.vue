@@ -1,8 +1,11 @@
 <template>
 <div>
-	<div v-if="bookedTables">
+	<div v-if="Array.isArray(bookedTables) && bookedTables.length">
 		<booked-table-row v-for="bookedTable in bookedTables"
 			:key="bookedTable._id" :bookedTable="bookedTable" />
+	</div>
+	<div v-else>
+		Замовлень немає
 	</div>
 </div>
 </template>

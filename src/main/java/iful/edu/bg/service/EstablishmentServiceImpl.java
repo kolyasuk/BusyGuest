@@ -3,6 +3,7 @@ package iful.edu.bg.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,15 +45,9 @@ public class EstablishmentServiceImpl implements EstablishmentService {
 	}
 
 	@Override
-	public void updateEstablishment(Establishment establishment, String accountEmail) {
-//		try {
-//			Establishment establishmentFromDB = findByEmail(accountEmail);
-//			establishment.set_id(establishmentFromDB.get_id());
-//			establishment.setEmail(accountEmail);
-//			establishmentRepository.save(establishment);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
+	public Establishment updateEstablishment(Establishment establishmentFromDB, Establishment establishment) {
+		BeanUtils.copyProperties(establishment, establishmentFromDB, "id"); 
+		return establishmentRepository.save(establishmentFromDB);
 	}
 
 }

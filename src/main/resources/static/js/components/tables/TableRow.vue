@@ -1,86 +1,77 @@
 <template>
-<div style="display: inline-flex;">
-	<div
-		style="text-align: center; border-style: solid; width: 50px; margin: auto;"
-		@click="showDetails(index)">
-		<div>Стіл №{{table.tableNum}}</div>
-	</div>
+			<div>
+				<v-expansion-panel-content>
 
-	<div v-show="tableIndexToShow == index && clicked==true"
-		style="text-align: center; border-style: solid; width: 200px; margin: auto;">
+		            <template v-slot:header >
+		              <div>Стіл №{{table.tableNum}}</div>
+		            </template>
+		            
+		            <v-card max-width="350">
+		              <v-card-text >
+		              	<booked-tables-list :bookedTables="bookedTables" :table="table"></booked-tables-list>
+		              	
+							<book-dialog v-if="role=='VISITOR'" :title="`Замовити столик №`+table.tableNum" :buttonText="'Замовити'" 
+							:currentComponent="bookingTableForm" :componentProps="bookingTableFormProps"></book-dialog>
+							
+							<book-dialog v-if="role=='ESTB'" :title="`Редагувати столик №`+table.tableNum" :buttonText="'Редагувати'" 
+							:currentComponent="tableForm"  :componentProps="tableFormProps"></book-dialog>
+							
+				            <div v-if="role=='ESTB'" class="text-xs-center">
+						            <v-btn color="primary" fab small dark>
+						              <v-icon>edit</v-icon>
+						            </v-btn>
+						          	<v-btn fab dark small color="red">
+								      <v-icon dark>delete</v-icon>
+								    </v-btn>
+				             </div>
 
-		<booked-tables-list :bookedTables="bookedTables" :table="table"></booked-tables-list>
+		              </v-card-text>
+		            </v-card>
+	          </v-expansion-panel-content>
 
-		<div v-if="role!='ESTB'">
-			<textarea v-model="comment" placeholder="Побажання"></textarea>
-			<input type="datetime-local" v-model="date"> <input
-				type="button" value="Book" @click="book" /> <span
-				v-if="alreadyBooked">{{alreadyBooked}}</span>
-		</div>
-	</div>
-</div>
-
+	       </div>
 </template>
 
 <script>
+	import BookDialog from 'components/UI/BookDialog.vue'
     import BookedTablesList from 'components/tables/bookedTables/BookedTablesList.vue'
-    import {mapState, mapActions, mapMutations} from 'vuex'
+    import {mapState, mapActions} from 'vuex'
     import EventBus from 'eventBus/event-bus.js'
     import bookedTablesApi from 'api/bookedTableApi'
     import {addHandler} from 'util/ws.js'
+    import BookingTableForm from 'components/tables/bookedTables/BookingTableForm.vue'
+    import TableForm from 'components/tables/TableForm.vue'
 
     export default {
+        components: {
+            BookedTablesList,
+            BookDialog,
+            BookingTableForm,
+            TableForm,
+        },
         props: ['table','index'],
         data() {
             return {
-                date: "2020-12-19T16:39",
-                clicked: false,
-                comment: null,
                 alreadyBooked: null,
-                bookedTableIndex: -1,
-                bookedTables: null
+                bookedTables: null,
+                bookingTableForm: BookingTableForm,
+                bookingTableFormProps:{
+                	id: this.table._id,
+                	table: this.table,
+                },
+                tableForm: TableForm,
+                tableFormProps:{
+                	table: this.table,
+                },
             }
         },
-        computed: mapState(['profile','role','tableIndexToShow']),
-        components: {
-            BookedTablesList
-        },
+        computed: mapState(['profile','role']),
         mounted () {
             EventBus.$on('user-book-deleted', (index) => {
                 this.alreadyBooked=null
             })
-       },
+       	},
         methods: {
-            ...mapMutations(['changeTableIndex']),
-            book() {
-                this.$resource('/'+this.role.toLowerCase()+'/checkBookedTable/{userId}/{estbId}')
-                .get({userId: this.profile.id, estbId: this.$props.table.estb._id}).then(result =>
-                result.json().then(isPresent  => {
-                    if(!isPresent){
-                        const bookedTable = {
-                            user: this.profile, 
-                            table: this.table, 
-                            estb:this.$props.table.estb, 
-                            comment:this.comment, 
-                            bookedOn: this.date, 
-                            done: false
-                        }
-
-                       bookedTablesApi.add(bookedTable)
-                       
-                       this.comment=null
-                    }else{
-                        this.alreadyBooked='Ви вже зарезервували столик!'
-                    }
-                }))
-            },
-            showDetails(index){
-                if(this.tableIndexToShow == index && this.clicked)
-                    this.clicked=false;
-                else this.clicked = true
-
-                this.changeTableIndex(index)
-            },
             async loadBoockedTables(tableId){
 	        	const result = await bookedTablesApi.getByTable(tableId)
 	        	const data = await result.json()
@@ -92,7 +83,7 @@
         	
             addHandler(data=>{
                 if (data.objectType === 'BOOKEDTABLE') {
-                    const index = this.bookedTables.findIndex(item => item.id === data.body.id)
+                    const index = this.bookedTables.findIndex(item => item._id === data.body._id)
                      switch (data.eventType) {
                          case 'CREATE':
                          if(data.body.table._id==this.table._id)
@@ -124,4 +115,27 @@
 </script>
 
 <style scoped>
+.table-button{
+	width: 40px;
+	position: absolute;
+	left:50px;
+}
+
+.button-edit{
+	top:0px;
+}
+
+.button-delete{
+	top:15px;
+}
+
+.table{
+	text-align: center; 
+	border-style: solid; 
+	width: 50px; 
+	margin: auto;
+	margin-left:45px;
+	position: relative;
+}
+
 </style>

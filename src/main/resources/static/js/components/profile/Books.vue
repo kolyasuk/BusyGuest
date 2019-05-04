@@ -1,13 +1,14 @@
 <template>
-        <div style="text-align:right; display:inline;">
-            <p>Ваші замовлення:</p>
-            <div v-for="(bookedTable, index) in userBookedTables" :key="index">
-                <router-link :to="`/bookedTable/`+`${bookedTable._id}`">
-                    <span  @click="reloadBookedTableComponent(bookedTable._id)">{{bookedTable.estb.name}} {{bookedTable.bookedOn | moment("MM/DD/YYYY HH:mm ")}}</span>
-                </router-link>
-                <input type="button" value="Delete" @click="deleteBook(bookedTable, index)">
-            </div>
-        </div>
+<div style="text-align: right; display: inline;">
+	<p>Ваші замовлення:</p>
+	<div v-for="(bookedTable, index) in userBookedTables" :key="index">
+		<router-link :to="`/bookedTable/`+`${bookedTable._id}`">
+		<span @click="reloadBookedTableComponent(bookedTable._id)">{{bookedTable.estb.name}}
+			{{bookedTable.bookedOn | moment("MM/DD/YYYY HH:mm ")}}</span> </router-link>
+		<input type="button" value="Delete"
+			@click="deleteBook(bookedTable, index)">
+	</div>
+</div>
 </template>
 
 <script>
@@ -27,7 +28,7 @@
             this.loadBoockedTables(this.profile.id)
         },
         methods:{
-        	...mapActions(['getUserBookedTablesAction']),
+/*         	...mapActions(['getUserBookedTablesAction']), */
             deleteBook(bookedTable, index){
             	const currentRoute = this.$route.path
             	if(currentRoute.includes('bookedTable'))
@@ -43,7 +44,7 @@
 
                 addHandler(data=>{
                 if (data.objectType === 'BOOKEDTABLE') {
-                    const index = this.userBookedTables.findIndex(item => item.id === data.body.id)
+                    const index = this.userBookedTables.findIndex(item => item._id === data.body._id)
                      switch (data.eventType) {
                          case 'CREATE':
                             if(data.body.user.id==this.profile.id)
@@ -79,5 +80,4 @@
 </script>
 
 <style>
-
 </style>

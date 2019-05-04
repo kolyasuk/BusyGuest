@@ -31,5 +31,7 @@ public class Establishment {
 	private String workSchedule;
 	
 	private String description;
+	
+	private boolean show;
 
 }

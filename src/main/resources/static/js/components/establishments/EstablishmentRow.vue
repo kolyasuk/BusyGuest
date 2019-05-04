@@ -1,5 +1,5 @@
 <template>
-   <div>
+   <div v-show="establishment.show">
         <div v-if="role=='ESTB'">
             <div v-if="profile.email===establishment.email">
             	{{this.$router.push(`/establishment/`+establishment._id)}}

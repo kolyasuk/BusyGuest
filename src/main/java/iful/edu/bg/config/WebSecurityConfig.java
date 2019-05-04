@@ -42,6 +42,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.antMatcher("/**").authorizeRequests().antMatchers("/", "/login**", "/js/**", "/error**").permitAll().
+			antMatchers("/estb/establishment/{estbId}/table", "/visitor/{tableId}/bookedTable", "/visitor/bookedTable/{id}").
+			hasAnyAuthority("VISITOR", "ESTB").
 			antMatchers("/visitor/**").hasAuthority("VISITOR").
 			antMatchers("/admin/**").hasAuthority("ADMIN").
 			antMatchers("/estb/**").hasAuthority("ESTB").

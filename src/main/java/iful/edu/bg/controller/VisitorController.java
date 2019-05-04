@@ -17,9 +17,7 @@ import iful.edu.bg.dto.EventType;
 import iful.edu.bg.dto.ObjectType;
 import iful.edu.bg.enums.Reputations;
 import iful.edu.bg.model.BookedTable;
-import iful.edu.bg.model.Establishment;
 import iful.edu.bg.model.Reputation;
-import iful.edu.bg.model.Table;
 import iful.edu.bg.model.User;
 import iful.edu.bg.model.Views;
 import iful.edu.bg.repository.ReputationRepository;
@@ -55,17 +53,6 @@ public class VisitorController {
 		this.userRepository = userRepository;
 		this.reputationRepository = reputationRepository;
 		this.wsSender = wsSender.getSender(ObjectType.BOOKEDTABLE, Views.Id.class);
-	}
-	
-
-	@GetMapping("establishment/{id}")
-	public Establishment getEstablishmentByEmail(@PathVariable("id") String id) throws Exception {
-		return establishmentServiceImpl.findById(id);
-	}
-	
-	@GetMapping("establishment/{id}/table")
-	public List<Table> getEstablishmentTables(@PathVariable("id") String id) throws Exception {
-		return tableServiceImpl.getTableListByEstb(id);
 	}
 	
 	

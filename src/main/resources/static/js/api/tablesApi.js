@@ -1,11 +1,12 @@
 import Vue from 'vue'
 
 
-const tables = Vue.resource('/visitor/establishment{/id}/table')
+const tables = Vue.resource('/estb/establishment{/estbId}/table{/id}')
 
 export default {
-	get: id => tables.get({id})
-/*    add: bookedTable => bookedTables.save({}, bookedTable),
-    update: bookedTable => bookedTables.update({id: bookedTable._id}, bookedTable),
-    remove: id => bookedTables.remove({id}),*/
+	getTablesByEstablishment: estbId => tables.get({estbId}),
+	get: id => tables.get({id}),
+	add: table => tables.save({}, table),
+    update: table => tables.update({id: table._id}, table),
+    remove: id => tables.remove({id}),
 }

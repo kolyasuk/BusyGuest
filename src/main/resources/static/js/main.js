@@ -5,6 +5,13 @@ import '@babel/polyfill'
 import router from 'router/router.js'
 import store from 'store/store.js'
 import { connect } from './util/ws'
+import VDragged from 'v-dragged'
+import Vuetify from 'vuetify'
+import 'vuetify/dist/vuetify.min.css'
+
+Vue.use(Vuetify)
+
+Vue.use(VDragged)
 
 connect()
 

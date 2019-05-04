@@ -9,9 +9,9 @@ import iful.edu.bg.model.Table;
 
 public interface TableService {
 
-	void createTable(Table table, String email) throws Exception;
+	Table createTable(Table table) throws Exception;
 
-	void updateTable(Establishment estb, Table table) throws Exception;
+	Table updateTable(Table tableFromDB, Table table) throws Exception;
 
 	Table getTableById(String id) throws Exception;
 
