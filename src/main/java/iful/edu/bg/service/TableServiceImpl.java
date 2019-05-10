@@ -68,4 +68,9 @@ public class TableServiceImpl implements TableService {
 		return tableRepository.save(tableFromDB);
 	}
 
+	@Override
+	public void deleteTable(Table table) throws Exception {
+		tableRepository.delete(table);
+	}
+
 }

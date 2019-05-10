@@ -1,8 +1,8 @@
 <template>
 			<div>
-				<v-expansion-panel-content>
+				<v-expansion-panel-content :style="tableBooked">
 
-		            <template v-slot:header >
+		            <template v-slot:header>
 		              <div>Стіл №{{table.tableNum}}</div>
 		            </template>
 		            
@@ -10,21 +10,12 @@
 		              <v-card-text >
 		              	<booked-tables-list :bookedTables="bookedTables" :table="table"></booked-tables-list>
 		              	
-							<book-dialog v-if="role=='VISITOR'" :title="`Замовити столик №`+table.tableNum" :buttonText="'Замовити'" 
-							:currentComponent="bookingTableForm" :componentProps="bookingTableFormProps"></book-dialog>
-							
-							<book-dialog v-if="role=='ESTB'" :title="`Редагувати столик №`+table.tableNum" :buttonText="'Редагувати'" 
-							:currentComponent="tableForm"  :componentProps="tableFormProps"></book-dialog>
-							
-				            <div v-if="role=='ESTB'" class="text-xs-center">
-						            <v-btn color="primary" fab small dark>
-						              <v-icon>edit</v-icon>
-						            </v-btn>
-						          	<v-btn fab dark small color="red">
-								      <v-icon dark>delete</v-icon>
-								    </v-btn>
-				             </div>
+							<booking-table-dialog v-if="role=='VISITOR'" :table="table"></booking-table-dialog>
 
+				            <div v-if="role=='ESTB'" class="text-xs-center">									
+								<edit-table-dialog :table="table"></edit-table-dialog>
+								<delete-table-dialog :table="table"></delete-table-dialog>
+							</div>
 		              </v-card-text>
 		            </v-card>
 	          </v-expansion-panel-content>
@@ -33,43 +24,40 @@
 </template>
 
 <script>
-	import BookDialog from 'components/UI/BookDialog.vue'
+	import BookingTableDialog from 'components/UI/BookingTableDialog.vue'
     import BookedTablesList from 'components/tables/bookedTables/BookedTablesList.vue'
+	import EditTableDialog from 'components/UI/EditTableDialog.vue'
+	import DeleteTableDialog from 'components/UI/DeleteTableDialog.vue'
     import {mapState, mapActions} from 'vuex'
     import EventBus from 'eventBus/event-bus.js'
     import bookedTablesApi from 'api/bookedTableApi'
     import {addHandler} from 'util/ws.js'
-    import BookingTableForm from 'components/tables/bookedTables/BookingTableForm.vue'
-    import TableForm from 'components/tables/TableForm.vue'
 
     export default {
         components: {
             BookedTablesList,
-            BookDialog,
-            BookingTableForm,
-            TableForm,
+            BookingTableDialog,
+            EditTableDialog,
+            DeleteTableDialog,
         },
         props: ['table','index'],
         data() {
             return {
                 alreadyBooked: null,
                 bookedTables: null,
-                bookingTableForm: BookingTableForm,
-                bookingTableFormProps:{
-                	id: this.table._id,
-                	table: this.table,
-                },
-                tableForm: TableForm,
-                tableFormProps:{
-                	table: this.table,
-                },
+                tableBooked: 'color: black'
             }
         },
         computed: mapState(['profile','role']),
         mounted () {
             EventBus.$on('user-book-deleted', (index) => {
                 this.alreadyBooked=null
+            }),
+            EventBus.$on('found-new-book', (bookedTable) => {
+            	if(this.table._id == bookedTable.table._id)
+            		this.tableBooked = 'color: red'
             })
+            
        	},
         methods: {
             async loadBoockedTables(tableId){
@@ -86,11 +74,14 @@
                     const index = this.bookedTables.findIndex(item => item._id === data.body._id)
                      switch (data.eventType) {
                          case 'CREATE':
-                         if(data.body.table._id==this.table._id)
+                         if(data.body.table._id==this.table._id && this.role =='ESTB')
+                        	this.tableBooked =  'color: red'
                             this.bookedTables.push(data.body)
                             break
                          case 'UPDATE':
                          if(data.body.table._id==this.table._id){
+                        	 if(data.body.accepted)
+                        		 this.tableBooked =  'color: black'
                             if (index > -1) {
                                 this.bookedTables.splice(index, 1, data.body)
                             } else {

@@ -3,6 +3,9 @@ package iful.edu.bg.config;
 import java.util.Collections;
 import java.util.Optional;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.AuthoritiesExtractor;
@@ -42,8 +45,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.antMatcher("/**").authorizeRequests().antMatchers("/", "/login**", "/js/**", "/error**").permitAll().
-			antMatchers("/estb/establishment/{estbId}/table", "/visitor/{tableId}/bookedTable", "/visitor/bookedTable/{id}").
+			antMatchers("/estb/establishment/{estbId}/table", "/visitor/{tableId}/bookedTable", "/visitor/bookedTable/{id}","/visitor/profile").
 			hasAnyAuthority("VISITOR", "ESTB").
+			antMatchers("/admin/user/{id}/bussines").hasAnyAuthority("VISITOR","ADMIN").
 			antMatchers("/visitor/**").hasAuthority("VISITOR").
 			antMatchers("/admin/**").hasAuthority("ADMIN").
 			antMatchers("/estb/**").hasAuthority("ESTB").
@@ -53,18 +57,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	@Bean
-	public PrincipalExtractor principalExtractor(UserRepository userRepository) {
+	public PrincipalExtractor principalExtractor(UserRepository userRepository, HttpServletRequest req) {
 		return map -> {
 			String id = (String) map.get("sub");
-
+			
 			User user = userRepository.findById(id).orElseGet(() -> {
-				User newUser = new User();
-				Role visitorRole = roleRepository.findByName(Roles.VISITOR);
+				Role visitorRole = null;
+				for (Cookie c : req.getCookies()) {
+					if (c.getName().equals("bussines")) {
+						visitorRole = roleRepository.findByName(Roles.ESTB);
+						break;
+					}
+					else visitorRole = roleRepository.findByName(Roles.VISITOR);
+				}  
 				
+				User newUser = new User();
+	
 				if(visitorRole.getName().equals(Roles.VISITOR)) {
 					Reputation reputation = new Reputation(null, Reputations.UNRELIABLE, 0, 0);
 					newUser.setReputation(reputationRepository.save(reputation));
-					newUser.setPhone("");
 				}
 				
 				newUser.setRole(visitorRole);
@@ -74,6 +85,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				newUser.setGender((String) map.get("gender"));
 				newUser.setLocale((String) map.get("locale"));
 				newUser.setUserpic((String) map.get("picture"));
+				newUser.setPhone("");
 
 
 

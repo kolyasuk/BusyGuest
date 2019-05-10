@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <v-app>
     	
     	<div v-if="establishment.show || role==='ESTB'">
 			<div v-if="role==='ESTB' && profile.email!=establishment.email">
@@ -66,7 +66,7 @@
 	    <div v-else>
 	    	Заклад не оприлюднено!
 	    </div>
-    </div>
+    </v-app>
 </template>
 
 <script>

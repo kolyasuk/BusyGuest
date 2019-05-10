@@ -44,6 +44,11 @@
             	const index = this.tablesList.findIndex(item => item._id === data._id)
             	this.tablesList.splice(index, 1, data)
             })
+            EventBus.$on('table-deleted', (data) => {
+            	const index = this.tablesList.findIndex(item => item._id === data._id)
+            	this.tablesList.splice(index, 1)
+            })
+
 
        	},
         created: function(){

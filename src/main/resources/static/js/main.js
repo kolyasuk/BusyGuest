@@ -8,6 +8,12 @@ import { connect } from './util/ws'
 import VDragged from 'v-dragged'
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
+var VueCookie = require('vue-cookie');
+import Vuelidate from 'vuelidate'
+
+Vue.use(Vuelidate)
+
+Vue.use(VueCookie);
 
 Vue.use(Vuetify)
 

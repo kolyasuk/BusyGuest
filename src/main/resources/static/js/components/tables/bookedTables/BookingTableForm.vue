@@ -18,17 +18,10 @@
     
     
     export default {
-        props: ['props'],
+        props: ['table'],
         computed: mapState(['role','profile']),
-        mounted () {
-        	 EventBus.$on('dialog-action', (id) => {
-        		 if(this.table._id==id)
-                 this.book()
-             })
-       	},
         data(){
         	return{
-        		...this.props,
         		comment: null,
                 alreadyBooked: null,
                 date: "2020-12-19T16:39",
@@ -52,7 +45,7 @@
 
                        bookedTablesApi.add(bookedTable)
                        
-                       this.dialog = false
+                       EventBus.$emit('dialog-close')
                        this.comment=null
 
                     }else{

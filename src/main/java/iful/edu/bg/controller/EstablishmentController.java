@@ -3,6 +3,7 @@ package iful.edu.bg.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -55,6 +56,12 @@ public class EstablishmentController {
 	@PutMapping("establishment/table/{id}")
 	public Table updateTable(@PathVariable("id") Table tableFromDB, @RequestBody Table table) throws Exception {
 		return tableServiceImpl.updateTable(tableFromDB, table);
+	}
+	
+	@DeleteMapping("establishment/table/{id}")
+	public Table deteleTable(@PathVariable("id") Table table) throws Exception {
+		tableServiceImpl.deleteTable(table);
+		return table;
 	}
 	
 	@PutMapping("establishment/{id}")

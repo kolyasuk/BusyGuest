@@ -3,7 +3,7 @@ import VueResource from 'vue-resource'
 
 Vue.use(VueResource)
 
-const profiles = Vue.resource('visitor/profile')
+const profiles = Vue.resource('/visitor/profile')
 
 export default {
     update: profile => profiles.update(profile),

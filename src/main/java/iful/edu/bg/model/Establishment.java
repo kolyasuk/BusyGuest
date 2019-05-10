@@ -1,5 +1,7 @@
 package iful.edu.bg.model;
 
+import java.util.ArrayList;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.IndexDirection;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -26,7 +28,7 @@ public class Establishment {
 	
 	private String address;
 	
-	private String phone;
+	private ArrayList<String> phone;
 	
 	private String workSchedule;
 	

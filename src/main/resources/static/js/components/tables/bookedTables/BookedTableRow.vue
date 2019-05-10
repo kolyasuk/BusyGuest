@@ -14,9 +14,15 @@
 
 <script>
     import { mapState} from 'vuex'
+    import EventBus from 'eventBus/event-bus.js'
     export default {
         props: ['bookedTable'],
-        computed: mapState(['role','profile'])
+        computed: mapState(['role','profile']),
+        created: function(){
+        	if(!this.bookedTable.accepted && this.role == 'ESTB'){
+        		EventBus.$emit('found-new-book', this.bookedTable)
+        	}
+        }
     }
 
 </script>

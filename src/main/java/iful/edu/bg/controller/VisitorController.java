@@ -110,7 +110,7 @@ public class VisitorController {
 	
 	
 	@PutMapping("profile")
-	public User inputPhone(@RequestBody User user) throws Exception {
+	public User updateProfile(@RequestBody User user) throws Exception {
 		return userRepository.save(user);
 	}
 

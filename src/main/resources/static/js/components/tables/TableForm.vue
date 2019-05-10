@@ -12,35 +12,32 @@
     import EventBus from 'eventBus/event-bus.js'
     
     export default {
-    	props:['props'],
+    	props:['table','establishment'],
         data(){
             return {
-            	 ...this.props,
             	id: null,
                 tableNum: 1,
-                seats: 1
+                seats: 1,
+                estb: null
             }
         },
         created: function(){
-            if(this.props){
-                this.id = this.table._id 
-            	this.tableNum = this.table.tableNum
-                this.seats = this.table.seats
-            }
+        	if(this.table){
+	        	this.id = this.table._id 
+	            this.tableNum = this.table.tableNum
+	            this.seats = this.table.seats
+	            this.estb = this.table.estb
+        	}else{        		
+	            this.estb = this.establishment
+        	}
         },
-        mounted () {
-       	 EventBus.$on('dialog-action', (id) => {
-       		 if(this.table._id==id)
-                this.saveTable()
-            })
-      	},
         methods: {
         	async saveTable() {
 	            var table = {
 	            	_id: this.id,
 	            	tableNum : this.tableNum,
 	            	seats: this.seats,
-	            	estb: this.table.estb 
+	            	estb: this.estb 
 	            }
 	            
 	            if(this.id){
@@ -54,6 +51,7 @@
 		        	EventBus.$emit('table-added', data)
 		            ++this.tableNum
 	            }
+	            EventBus.$emit('dialog-close')
             }
         }
     }

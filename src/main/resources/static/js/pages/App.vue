@@ -17,20 +17,15 @@
 	    
 	    <v-content>
 	    	<div v-if="!profile">
-			    Авторизуйтесь через 
-		        <a href="/login">Google</a> 
+		        <v-btn color="primary" href="/login">Вхід</v-btn>
+		        <v-btn color="primary" @click="createEstb">Вхід для підприємців</v-btn>
 	        </div>
 	        <div v-if="role=='VISITOR'">
 	        	<books></books>
 	        </div>
 	        <v-container fluid>
-		        <div v-if="role=='VISITOR' && profile.phone===''">
-		            <p>Для продовження введіть всій номер телефону</p>
-		            <span v-if="incorrectPhone">{{incorrectPhone}}</span>
-		            <input type="tel" id="phone" name="phone" v-model="phone" pattern="[0-9]{10,13}" required>
-		            <button v-on:click="inputPhone()">Go!</button>
-		        </div>
-		        
+	        
+	        	<sign-up-stepper v-if="profile && profile.phone=='' || showStepper"></sign-up-stepper>
 		        <div v-else>
 		            <div>
 		                <router-view></router-view>
@@ -46,37 +41,53 @@
 <script>
     import EstablishmentsList from 'components/establishments/EstablishmentsList.vue'
     import Books from 'components/profile/Books.vue'
+    import SignUpStepper from 'components/UI/SignUpStepper.vue'
     import { mapState} from 'vuex'
     import { mapActions } from 'vuex'
     import {PhoneConstants} from 'constants/PhoneConstants'
+    import EventBus from 'eventBus/event-bus.js'
 
     
 
     export default {
         components: {
             EstablishmentsList,
-            Books
+            Books,
+            SignUpStepper
         },
+        created(){
+        	if(this.profile && this.profile.phone==''){
+        		showStepper: true
+        	}
+        	
+        	this.checkEstb()
+        },
+        mounted () {
+            EventBus.$on('close_stepper', () => {
+            	this.showStepper=false
+            	this.checkEstb()
+            })
+       	},
         data: function () {
             return {
-                incorrectPhone: null,
-                phone: null
+                showStepper: false,
+                step: 0,
             }
         },
-        computed: mapState(['profile', 'role']),
+        computed: mapState(['profile', 'role','establishments']),
         methods:{
-             ...mapActions(['addPhoneAction']),
-            inputPhone(){
-                if (this.phone != null && this.phone != PhoneConstants.EMPTY 
-                		&& this.phone.length >= PhoneConstants.MIN_LENGTH 
-                		&& this.phone.length <= PhoneConstants.MAX_LENGTH) {
-                	
-                    this.profile.phone=this.phone;
-                    this.addPhoneAction(this.profile)
-                    this.incorrectPhone=null
-                }else
-                    this.incorrectPhone = 'Вкажіть коректний номер телефону!';
-            }
+             createEstb(){
+            	this.showStepper = true
+             	this.$cookie.set('bussines', 'true', '1h')
+             },
+             checkEstb(){
+            	 if(this.role=='ESTB'&& this.profile.phone != '') {
+              		const estb = this.establishments.find(element => element.email==this.profile.email);
+              		if(estb==null){
+              			this.$router.push('/establishment')
+              		}
+              	}
+             }
              
         }
     }

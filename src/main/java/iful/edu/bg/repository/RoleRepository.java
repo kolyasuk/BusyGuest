@@ -7,6 +7,6 @@ import iful.edu.bg.model.Role;
 
 public interface RoleRepository extends MongoRepository<Role, String> {
 
-	Role findByName(Roles visitor);
+	Role findByName(Roles role);
 
 }

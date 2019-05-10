@@ -12,6 +12,8 @@ public interface TableService {
 	Table createTable(Table table) throws Exception;
 
 	Table updateTable(Table tableFromDB, Table table) throws Exception;
+	
+	void deleteTable(Table table) throws Exception;
 
 	Table getTableById(String id) throws Exception;
 

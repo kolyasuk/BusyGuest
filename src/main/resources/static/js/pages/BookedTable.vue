@@ -1,5 +1,5 @@
 <template>
-<div>
+<v-app>
 	Заклад: {{this.bookedTable.estb.name}}<br> 
 	Столик №{{this.bookedTable.table.tableNum}}<br> 
 	Замовник: {{this.bookedTable.user.name}}<br>
@@ -19,7 +19,7 @@
 	<div v-if="role===`ESTB`">
 		<button v-on:click="changeBookStatus()">{{this.bookedTable.accepted ? 'Cancel' : 'Accept'}}</button>
 	</div>
-</div>
+</v-app>
 </template>
 <script>
     import EstablishmentsList from 'components/establishments/EstablishmentsList.vue'

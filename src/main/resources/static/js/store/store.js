@@ -23,8 +23,8 @@ export default new Vuex.Store({
     },
     actions: {
     	async addPhoneAction({commit}, profile) {
-        	const result = await profileApi.update(profile)
-        	const data = await result.json()
+    		const result = await profileApi.update(profile)
+    		const data = await result
             commit('addPhoneMutation', data)
         },
         async getUserBookedTablesAction({commit}, userId){
