@@ -12,6 +12,14 @@ export default new Vuex.Store({
         profile: frontendData.profile,
         role: frontendData.role,
         userBookedTables:[],
+        dragTables: false,
+        estbCoordinates:{
+        	estbId: null,
+        	width: null,
+        	height: null,
+        	tables: null,
+        	signs: null
+        },
     },
     mutations: {
         addPhoneMutation(state, profile) {
@@ -19,6 +27,21 @@ export default new Vuex.Store({
         },
         getUserBookedTablesMutation(state, userBookedTables){
         	state.userBookedTables = userBookedTables
+        },
+        addEstablishmentMutation(state, establishment) {
+            state.establishments.push(establishment)
+        },
+        changeDragTablesMutation(state, dragTables) {
+            state.dragTables = !dragTables
+        },
+        addEstbCoordinatesMutation(state, estbCoordinates) {
+        	state.estbCoordinates = estbCoordinates
+        },
+        setTablesCoordinates(state, [tableId, tablesCoordinatesObj]) {
+        	state.estbCoordinates.tables[tableId] = tablesCoordinatesObj
+        },
+        setSignsCoordinates(state, [signId, signsObj]) {
+        	state.estbCoordinates.signs[signId] = signsObj
         }
     },
     actions: {

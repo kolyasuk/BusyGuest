@@ -1,11 +1,11 @@
 <template>
     <div>
         <textarea v-model="comment" placeholder="Побажання"></textarea>
-		<input type="datetime-local" v-model="date"> 
+		<input type="datetime-local" min="currentDate" v-model="date"> 
 		<span v-if="alreadyBooked">{{alreadyBooked}}</span>
 		
 		<v-btn color="primary" flat @click="book()">
-			Book
+			Book{{date}}
 		</v-btn>
     </div>
     
@@ -19,12 +19,15 @@
     
     export default {
         props: ['table'],
-        computed: mapState(['role','profile']),
+        computed: {
+        	  ...mapState(['role','profile']),
+        },
         data(){
         	return{
         		comment: null,
                 alreadyBooked: null,
-                date: "2020-12-19T16:39",
+                currentDate:new Date().toJSON().slice(0,16),
+                date: new Date().toJSON().slice(0,16)
         	}
         },
         methods: {
@@ -52,7 +55,7 @@
                         this.alreadyBooked='Ви вже зарезервували столик!'
                     }
                 }))
-            },
+            }
         },
     }
 

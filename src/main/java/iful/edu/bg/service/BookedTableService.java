@@ -2,7 +2,7 @@ package iful.edu.bg.service;
 
 import java.util.List;
 
-import iful.edu.bg.model.BookedTable;
+import iful.edu.bg.entity.BookedTable;
 
 public interface BookedTableService {
 

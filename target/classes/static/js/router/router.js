@@ -5,6 +5,7 @@ import CreateEstablishment from 'pages/CreateEstablishment.vue'
 import EstablishmentsList from 'components/establishments/EstablishmentsList.vue'
 import TablesList from 'components/tables/TablesList.vue'
 import BookedTable from 'pages/BookedTable.vue'
+import AdminPanel from 'pages/AdminPanel.vue'
 
 Vue.use(VueRouter)
 
@@ -14,11 +15,9 @@ Vue.use(VueRouter)
    {path: '/establishment', component: CreateEstablishment, props: true},
    {path: '/', component: EstablishmentsList, props: true},
    {path: '/bookedTable/:id', component: BookedTable, props: true},
+   {path: '/admin', component: AdminPanel, props: true},
 
-
-
-    { path: '*', component: EstablishmentsList}
-
+   { path: '*', component: EstablishmentsList}
  ]
 
 export default new VueRouter({

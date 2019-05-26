@@ -1,4 +1,4 @@
-package iful.edu.bg.model;
+package iful.edu.bg.entity;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -29,7 +29,9 @@ public class Table {
 	private Establishment estb;
 	@NotNull
 	private int tableNum;
+	@NotNull
 	private int seats;
+	@NotNull
 	private TableStatuses status;
 
 }

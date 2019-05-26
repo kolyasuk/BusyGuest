@@ -1,18 +1,39 @@
 <template>
     <v-app>
-	    Привіт! Створи його зараз же!
-	    
-	    <establishment-form></establishment-form>
+	    <div v-if="role=='ESTB'">
+	    	<div v-if="profileEstb == null">
+			    Привіт! Ще не подав заявку закладу? Зроби це просто зараз!
+			    
+			    <establishment-form></establishment-form>
+		    </div>
+		    <div v-else>
+				Ви вже створили заклад!
+			</div>
+		</div>
+		<div v-else>
+			Ви не можете створювати заклад!
+		</div>
     </v-app>
 </template>
 
 <script>
 	import EstablishmentForm from 'components/establishments/EstablishmentForm.vue'
-	
+	import { mapState} from 'vuex'
     export default {
 	    components:{
 	    	EstablishmentForm,
 	    },
+	    data() {
+	        return {
+	        	profileEstb: null
+	        }
+	    },
+	    created(){
+	    	this.profileEstb = this.establishments.find(item => item.email==this.profile.email)
+	    },
+	    computed: {
+	    	...mapState(['profile', 'role', 'establishments'])
+	    }
     }
 </script>
 

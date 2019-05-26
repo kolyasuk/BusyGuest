@@ -1,13 +1,15 @@
 <template>
     <v-app>
-    	
-    	<div v-if="establishment.show || role==='ESTB'">
+    	<div v-if="role=='ADMIN'">
+    		<v-btn @click="acceptEstablishment">{{establishment.accepted ? 'Заховати' : 'Підтвердити'}}</v-btn>
+    	</div>
+    	<div v-if="establishment.show || role!='VISITOR'">
 			<div v-if="role==='ESTB' && profile.email!=establishment.email">
 		        	Не ваш заклад!	
 		    </div>
 		     <div v-else>
-		     
-		     	<div v-if="role==='ESTB'">
+		     	<div v-if="role==='ESTB' && establishment.accepted">
+		     		
 			     	<div v-if="!establishment.show">
 	    				<h3>Заклад не оприлюднено! Після заповнення всієї інформації, не забудьте опублікувати!</h3>
 	    				<input type="button" @click="changeShowStatus()" value="Опублікувати">
@@ -18,48 +20,41 @@
 	    			</div>
     			</div>
     			
-		        <div  style="text-align:center;">
-		
-			        <h2 v-show="editElementId != 'name'" id="name">{{establishment.name}}</h2>
-			        <input v-show="editElementId === 'name'" type="text" v-model="establishment.name">  
-			        <div v-if="role===`ESTB`">
-			            <button v-on:click="edit('name')">Edit</button>
-			        </div>
-			
-			        <span>Про нас: </span>
-			        <span v-show="editElementId != 'description'" id="description">{{establishment.description}}</span>
-			        <input v-show="editElementId === 'description'" type="text"  v-model="establishment.description">  
-			        <div v-if="role===`ESTB`">
-			            <button v-on:click="edit('description')">Edit</button>
-			        </div>
-			
-			        <span>Адреса: </span>
-			        <span v-show="editElementId != 'address'" id="address">{{establishment.address}}</span>
-			        <input v-show="editElementId === 'address'" type="text" v-model="establishment.address">  
-			        <div v-if="role===`ESTB`">
-			            <button v-on:click="edit('address')">Edit</button>
-			        </div>
-			
-			        <span>Номер телефону: </span>
-			        <span v-show="editElementId != 'phone'" id="phone">{{establishment.phone}}</span>
-			        <input v-show="editElementId === 'phone'" type="text" v-model="establishment.phone">  
-			        <div v-if="role===`ESTB`">
-			            <button v-on:click="edit('phone')">Edit</button>
-			        </div>
-			        
-			        <span>Графік: </span>
-			        <span v-show="editElementId != 'workSchedule'" id="workSchedule">{{establishment.workSchedule}}</span>
-			        <input v-show="editElementId === 'workSchedule'" type="text" v-model="establishment.workSchedule">  
-			        <div v-if="role===`ESTB`">
-			            <button @click="edit('workSchedule')">Edit</button>
-			        </div>
-		        </div>
-				<h3>Столики: </h3>
-				<div v-if="role=='ESTB'">
-					<button  @click="showForm=!showForm" >+</button>
+    			<div v-if="role==='ESTB' && !establishment.accepted">
+    				<h3>Заклад знаходиться на розгляді в адміністрації!</h3>
+    			</div>
+		        <div>
+				<div style="text-align: center;">
+					<h1 style="display: inline;" v-show="editElementId != 'name'" id="name">
+						{{establishment.name}}
+					</h1>
+					<span v-show="editElementId === 'name'">
+						<input style="border: 2px solid #87CEFA; font-size: 30px;" type="text" v-model="establishment.name">
+					</span>
+					<button v-if="role==`ESTB`" v-on:click="edit('name')"><v-icon color="green">edit</v-icon></button>
 				</div>
-				<table-form  :establishment=establishment v-show="showForm"></table-form>
-		        <tables-list></tables-list>
+				
+						<v-container fluid grid-list-md >
+						    <v-layout align-start justify-space-around fill-height wrap>
+						      <v-flex xs6 order-lg2>
+						        <v-carousel>
+								    <v-carousel-item
+								      v-for="(item,i) in items"
+								      :key="i"
+								      :src="item.src"
+								    ></v-carousel-item>
+								  </v-carousel>
+						      </v-flex>
+						      <v-flex xs6 order-lg2>
+						        <establishment-info :establishment="establishment"></establishment-info>
+						      </v-flex>
+						    </v-layout >
+						  </v-container>
+			
+		        	</div>
+				<h3>Замовити столик: </h3>
+
+		        <tables-list :establishment="establishment"></tables-list>
 		    </div>
 	    </div>
 	    
@@ -70,31 +65,60 @@
 </template>
 
 <script>
-    import { mapState} from 'vuex'
+    import { mapState, mapMutations} from 'vuex'
     import TablesList from 'components/tables/TablesList.vue'
-    import TableForm from 'components/tables/TableForm.vue'
+    import EstablishmentInfo from 'components/establishments/EstablishmentInfo.vue'
     import establishmentApi from 'api/establishmentApi'
 
     export default {
         components: {
             TablesList,
-            TableForm
+            EstablishmentInfo
         },
         data () {
              return {
-                editElementId: '',
-                editClickCount: 0,
-                editElementValue:'',
+                 editElementId: '',
+                 editClickCount: 0,
+                 editElementValue:'',
                 establishment: null,
-                showForm:false
              }
         },
         computed: mapState(['profile','establishments','role']),
 
         created: function() {
         	this.loadData()
+        	this.loadCoordinates()
+        	
         },
         methods: {
+        	...mapMutations(['changeDragTablesMutation', 'addEstbCoordinatesMutation']),
+            loadCoordinates(){
+            	var estbCoordinates
+                
+            	this.$http.get('/estb/establishment/'+this.establishment._id+'/coordinates').then((response) => {
+        			this.addEstbCoordinatesMutation(response.data)
+                }, (response) => {
+                	estbCoordinates = {
+  		                   estbId: this.establishment._id,
+  		                   width: 1000,
+  		                   height: 500,
+  		                   tables: {},
+  		                   signs: {}
+  	                   }
+                	this.addEstbCoordinatesMutation(estbCoordinates)
+            	})
+            },
+            loadData(){
+            	const index = this.establishments.findIndex(item => item._id === this.$route.params.id)
+            	this.establishment = this.establishments[index]
+            },
+            async changeShowStatus(){
+            	const establishment = {...this.establishment}
+            	establishment.show = !establishment.show
+            	const result = await establishmentApi.update(establishment)
+	        	const data = await result.json()
+	        	this.establishment = data
+            },
             edit(id) {
                 if(this.editClickCount==0){
                     this.editElementValue = this.establishment.name
@@ -112,16 +136,13 @@
                     this.editElementValue=''
                 }
             },
-            loadData(){
-            	const index = this.establishments.findIndex(item => item._id === this.$route.params.id)
-            	this.establishment = this.establishments[index]
-            },
-            async changeShowStatus(){
-            	const establishment = {...this.establishment}
-            	establishment.show = !establishment.show
-            	const result = await establishmentApi.update(establishment)
-	        	const data = await result.json()
-	        	this.establishment = data
+            acceptEstablishment(){
+            	const estb = {
+            		...this.establishment,
+            		accepted: !this.establishment.accepted
+            	}
+            	 this.$resource('/estb/establishment/{id}').update({id: estb._id}, estb).then(result =>
+                 result.json().then(data => this.establishment = data))
             }
         }
     }

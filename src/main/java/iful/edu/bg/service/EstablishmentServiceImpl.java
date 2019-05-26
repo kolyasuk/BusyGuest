@@ -7,8 +7,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import iful.edu.bg.model.Establishment;
+import iful.edu.bg.entity.Establishment;
 import iful.edu.bg.repository.EstablishmentRepository;
+import javassist.NotFoundException;
 
 @Service
 public class EstablishmentServiceImpl implements EstablishmentService {
@@ -27,21 +28,13 @@ public class EstablishmentServiceImpl implements EstablishmentService {
 		if (establishment.isPresent())
 			return establishment.get();
 		else
-			throw new Exception("Not found");
+			throw new NotFoundException("Establishment Not Found");
 	}
 
 	@Override
-	public Establishment createEstablishment(Establishment establishment/* , String accountEmail */) {
-		try {
-			// Establishment establishmentFromDB = findByEmail(accountEmail);
-			// establishment.set_id(establishmentFromDB.get_id());
-			// establishment.setEmail(accountEmail);
-			return establishmentRepository.save(establishment);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
+	public Establishment createEstablishment(Establishment establishment) {
+		establishment.setAccepted(false);
+		return establishmentRepository.save(establishment);
 	}
 
 	@Override

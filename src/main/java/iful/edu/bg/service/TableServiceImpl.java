@@ -8,9 +8,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import iful.edu.bg.entity.Establishment;
+import iful.edu.bg.entity.Table;
 import iful.edu.bg.enums.TableStatuses;
-import iful.edu.bg.model.Establishment;
-import iful.edu.bg.model.Table;
 import iful.edu.bg.repository.TableRepository;
 
 @Service

@@ -7,6 +7,7 @@
 	<div v-else>
 		Замовлень немає
 	</div>
+
 </div>
 </template>
 

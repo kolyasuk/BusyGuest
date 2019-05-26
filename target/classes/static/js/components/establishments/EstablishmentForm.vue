@@ -31,6 +31,24 @@
       	@blur="$v.description.$touch()"
      ></v-textarea>
      
+     <v-text-field
+      v-model="cuisine"
+      :error-messages="cuisineErrors"
+      label="Cuisine"
+      required
+      @input="$v.cuisine.$touch()"
+      @blur="$v.cuisine.$touch()"
+    ></v-text-field>
+    
+     <v-text-field
+      v-model="avgCheck"
+      :error-messages="avgCheckErrors"
+      label="AvgCheck"
+      required
+      @input="$v.avgCheck.$touch()"
+      @blur="$v.avgCheck.$touch()"
+    ></v-text-field>
+     
      <div v-for="(phone, index) in phones" :key="`phone-${index}`">
       	<span>{{phone}}</span>
       	<v-btn @click="deletePhone(index)" icon color="lighten-2">
@@ -63,18 +81,21 @@
 <script>
   import { validationMixin } from 'vuelidate'
   import { required, maxLength, minLength, length} from 'vuelidate/lib/validators'
-  import { mapState} from 'vuex'
+  import { mapState, mapMutations, } from 'vuex'
   import AddPhoneForm from 'components/profile/AddPhoneForm.vue'
   import EventBus from 'eventBus/event-bus.js'
+  import establishmentApi from 'api/establishmentApi'
 
   export default {
     mixins: [validationMixin],
 
     validations: {
-      name: { required},
-      address: { required, minLength: minLength(10) },
-      description: {required, minLength: minLength(50)},
-      workSchedule: {required, minLength: minLength(4)},
+      name: { required, maxLength: maxLength(25)},
+      address: { required, minLength: minLength(10), maxLength: maxLength(35)},
+      description: {required, minLength: minLength(50), maxLength: maxLength(400)},
+      workSchedule: {required, minLength: minLength(4), maxLength: maxLength(40)},
+      cuisine:{required, minLength: minLength(3), maxLength: maxLength(35)},
+      avgCheck: {required, minLength: minLength(2), maxLength: maxLength(10)}
     },
     components:{
     	AddPhoneForm,
@@ -87,6 +108,8 @@
             	workSchedule: "",
             	phones:[],
             	phone: +380,
+            	cuisine: "",
+            	avgCheck: "",
             	useProfilePhone: false
         }
     },
@@ -96,12 +119,14 @@
         const errors = []
         if (!this.$v.name.$dirty) return errors
         !this.$v.name.required && errors.push('Name is required.')
+        !this.$v.name.maxLength && errors.push('Name must be at least 25 characters long')
         return errors
       },
       descriptionErrors () {
           const errors = []
           if (!this.$v.description.$dirty) return errors
           !this.$v.description.minLength && errors.push('Description must be at most 50 characters long')
+          !this.$v.description.maxLength && errors.push('Description must be at least 400 characters long')
           !this.$v.description.required && errors.push('Description is required')
           return errors
         },
@@ -109,13 +134,31 @@
         	const errors = []
             if (!this.$v.address.$dirty) return errors
             !this.$v.address.minLength && errors.push('Address must be at most 10 characters long')
+            !this.$v.address.maxLength && errors.push('Address must be at least 35 characters long')
             !this.$v.address.required && errors.push('Address is required')
+            return errors
+        },
+        cuisineErrors (){
+        	const errors = []
+            if (!this.$v.cuisine.$dirty) return errors
+            !this.$v.cuisine.minLength && errors.push('Cuisine must be at most 3 characters long')
+            !this.$v.cuisine.maxLength && errors.push('Cuisine must be at least 35 characters long')
+            !this.$v.cuisine.required && errors.push('Cuisine is required')
+            return errors
+        },
+        avgCheckErrors (){
+        	const errors = []
+            if (!this.$v.avgCheck.$dirty) return errors
+            !this.$v.avgCheck.minLength && errors.push('AvgCheck must be at most 3 characters long')
+            !this.$v.avgCheck.maxLength && errors.push('AvgCheck must be at least 35 characters long')
+            !this.$v.avgCheck.required && errors.push('AvgCheck is required')
             return errors
         },
         workScheduleErrors (){
         	const errors = []
             if (!this.$v.workSchedule.$dirty) return errors
             !this.$v.workSchedule.minLength && errors.push('Work schedule must be at most 4 characters long')
+            !this.$v.workSchedule.maxLength && errors.push('Work schedule must be at least 40 characters long')
             !this.$v.workSchedule.required && errors.push('Work schedule is required')
             return errors
         }
@@ -126,25 +169,30 @@
         })
     },
     methods: {
-      submit () {
+    	...mapMutations(['addEstablishmentMutation']),
+      async submit () {
     	this.$v.$touch()
-    	if (this.$v.$invalid) {
+    	if (this.$v.$invalid || this.phones.length == 0) {
+    		if(this.phones.length == 0){
+            	EventBus.$emit('empty-phone-list')
+            }
            return;
         }
-    	
-    	if(this.phones.length == 0){
-    		EventBus.$emit('empty-phone-list')
-    		return;
-    	}
     	const estb = { 
     		email: this.profile.email,
     		name: this.name,
             address: this.address,
             description: this.description,
             workSchedule: this.workSchedule,
-            phones: this.phones
+            phone: this.phones,
+            cuisine: this.cuisine,
+            avgCheck: this.avgCheck
     	}
-    	console.log(estb)
+
+    	const result = await establishmentApi.add(estb)
+    	const data = await result.json()
+    	this.addEstablishmentMutation(data)
+    	this.$router.push('/')
       },
       clear () {
         this.$v.$reset()
@@ -153,6 +201,8 @@
         this.description = ''
         this.workSchedule = ''
         this.phone = ''
+        this.cuisine = ''
+        this.avgCheck = ''
       },
       addProfilePhone(){
     	if(this.useProfilePhone){

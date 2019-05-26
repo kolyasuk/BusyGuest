@@ -7,7 +7,7 @@
 </template>
 
 <script>
-    import { mapState} from 'vuex'
+    import { mapState, mapMutations} from 'vuex'
     import tablesApi from 'api/tablesApi'
     import EventBus from 'eventBus/event-bus.js'
     
@@ -31,7 +31,9 @@
 	            this.estb = this.establishment
         	}
         },
+        computed: mapState(['estbCoordinates']),
         methods: {
+        	...mapMutations(['setTablesCoordinates']),
         	async saveTable() {
 	            var table = {
 	            	_id: this.id,
@@ -43,6 +45,7 @@
 	            if(this.id){
 	            	const result = await tablesApi.update(table)
 		        	const data = await result.json()
+		        	
 		        	EventBus.$emit('table-edited', data)
 		        	
 	            }else{
@@ -50,6 +53,15 @@
 		        	const data = await result.json()
 		        	EventBus.$emit('table-added', data)
 		            ++this.tableNum
+		            
+		            var tablesCoordinatesObj = {
+	                		  x: 0,
+	                          y: 0,
+	                          width:48,
+	                          height:48
+	                  }     
+	                this.setTablesCoordinates([this.table._id, tablesCoordinatesObj])
+	                this.$resource('/estb/establishment{/id}/coordinates').save({id:this.$route.params.id}, this.estbCoordinates)
 	            }
 	            EventBus.$emit('dialog-close')
             }

@@ -24,7 +24,6 @@
 	        	<books></books>
 	        </div>
 	        <v-container fluid>
-	        
 	        	<sign-up-stepper v-if="profile && profile.phone=='' || showStepper"></sign-up-stepper>
 		        <div v-else>
 		            <div>
@@ -33,8 +32,6 @@
 		        </div>
 			</v-container>
 	    </v-content>
-
-        
     </v-app>
 </template>
 
@@ -59,13 +56,17 @@
         	if(this.profile && this.profile.phone==''){
         		showStepper: true
         	}
-        	
-        	this.checkEstb()
+        	this.checkRole()
+        },
+        watch:{
+            $route (to, from){
+                this.checkRole()
+            }
         },
         mounted () {
             EventBus.$on('close_stepper', () => {
             	this.showStepper=false
-            	this.checkEstb()
+            	this.checkRole()
             })
        	},
         data: function () {
@@ -80,9 +81,11 @@
             	this.showStepper = true
              	this.$cookie.set('bussines', 'true', '1h')
              },
-             checkEstb(){
-            	 if(this.role=='ESTB'&& this.profile.phone != '') {
-              		const estb = this.establishments.find(element => element.email==this.profile.email);
+             checkRole(){
+            	 if(this.role=='ADMIN'){
+            		 this.$router.push('/admin')
+            	 }else if(this.role=='ESTB'&& this.profile.phone != '') {
+              		const estb = this.establishments.find(element => element.email==this.profile.email)
               		if(estb==null){
               			this.$router.push('/establishment')
               		}

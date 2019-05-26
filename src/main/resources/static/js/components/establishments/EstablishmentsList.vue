@@ -1,7 +1,14 @@
 <template>
-    <div>
-        <establishment-row v-for="establishment in establishments" :key="establishment._id" :establishment="establishment"/>
-    </div>
+   
+	<v-flex xs12 sm6 offset-sm3>
+		<h2>Список закладів</h2>
+		<v-list two-line>
+			<template v-for="establishment in establishments" >
+			     <establishment-row  :establishment="establishment" :key="establishment._id"/>
+		    </template>
+		
+		</v-list>
+	</v-flex>
 </template>
 
 <script>

@@ -1,4 +1,4 @@
-package iful.edu.bg.model;
+package iful.edu.bg.entity;
 
 public final class Views {
 	

@@ -3,7 +3,7 @@ package iful.edu.bg.dto;
 import com.fasterxml.jackson.annotation.JsonRawValue;
 import com.fasterxml.jackson.annotation.JsonView;
 
-import iful.edu.bg.model.Views;
+import iful.edu.bg.entity.Views;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

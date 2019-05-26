@@ -7,8 +7,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import iful.edu.bg.model.BookedTable;
-import iful.edu.bg.model.Table;
+import iful.edu.bg.entity.BookedTable;
+import iful.edu.bg.entity.Table;
 import iful.edu.bg.repository.BookedTableRepository;
 
 @Service

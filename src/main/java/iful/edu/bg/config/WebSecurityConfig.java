@@ -12,18 +12,17 @@ import org.springframework.boot.autoconfigure.security.oauth2.resource.Authoriti
 import org.springframework.boot.autoconfigure.security.oauth2.resource.PrincipalExtractor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 
+import iful.edu.bg.entity.Reputation;
+import iful.edu.bg.entity.Role;
+import iful.edu.bg.entity.User;
 import iful.edu.bg.enums.Reputations;
 import iful.edu.bg.enums.Roles;
-import iful.edu.bg.model.Reputation;
-import iful.edu.bg.model.Role;
-import iful.edu.bg.model.User;
 import iful.edu.bg.repository.ReputationRepository;
 import iful.edu.bg.repository.RoleRepository;
 import iful.edu.bg.repository.UserRepository;
@@ -38,16 +37,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	private ReputationRepository reputationRepository;
 	
 	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		
-	}
-	
-	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.antMatcher("/**").authorizeRequests().antMatchers("/", "/login**", "/js/**", "/error**").permitAll().
 			antMatchers("/estb/establishment/{estbId}/table", "/visitor/{tableId}/bookedTable", "/visitor/bookedTable/{id}","/visitor/profile").
 			hasAnyAuthority("VISITOR", "ESTB").
 			antMatchers("/admin/user/{id}/bussines").hasAnyAuthority("VISITOR","ADMIN").
+			antMatchers("/estb/establishment/**", "/estb/establishment/{id}/coordinates").hasAnyAuthority("VISITOR","ADMIN", "ESTB").
 			antMatchers("/visitor/**").hasAuthority("VISITOR").
 			antMatchers("/admin/**").hasAuthority("ADMIN").
 			antMatchers("/estb/**").hasAuthority("ESTB").
@@ -82,16 +77,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				newUser.setId(id);
 				newUser.setName((String) map.get("name"));
 				newUser.setEmail((String) map.get("email"));
-				newUser.setGender((String) map.get("gender"));
-				newUser.setLocale((String) map.get("locale"));
 				newUser.setUserpic((String) map.get("picture"));
 				newUser.setPhone("");
-
-
-
+				
 				return newUser;
 			});
-
 			return userRepository.save(user);
 		};
 	}

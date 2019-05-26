@@ -3,9 +3,9 @@ package iful.edu.bg.service;
 import java.security.Principal;
 import java.util.List;
 
+import iful.edu.bg.entity.Establishment;
+import iful.edu.bg.entity.Table;
 import iful.edu.bg.enums.TableStatuses;
-import iful.edu.bg.model.Establishment;
-import iful.edu.bg.model.Table;
 
 public interface TableService {
 

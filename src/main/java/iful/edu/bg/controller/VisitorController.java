@@ -3,6 +3,8 @@ package iful.edu.bg.controller;
 import java.util.List;
 import java.util.function.BiConsumer;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,11 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import iful.edu.bg.dto.EventType;
 import iful.edu.bg.dto.ObjectType;
+import iful.edu.bg.entity.BookedTable;
+import iful.edu.bg.entity.Reputation;
+import iful.edu.bg.entity.User;
+import iful.edu.bg.entity.Views;
 import iful.edu.bg.enums.Reputations;
-import iful.edu.bg.model.BookedTable;
-import iful.edu.bg.model.Reputation;
-import iful.edu.bg.model.User;
-import iful.edu.bg.model.Views;
 import iful.edu.bg.repository.ReputationRepository;
 import iful.edu.bg.repository.UserRepository;
 import iful.edu.bg.service.BookedTableServiceImpl;
@@ -72,7 +74,7 @@ public class VisitorController {
 	}
 	
 	@PostMapping("bookedTable")
-	public BookedTable createBookedTable(@RequestBody BookedTable bookedTable) throws Exception {
+	public BookedTable createBookedTable(@Valid @RequestBody BookedTable bookedTable) throws Exception {
 		Reputation rep = bookedTable.getUser().getReputation();
 		if(rep.getOrders()!=0) {
 			double procent = (rep.getSuccessfulOrders()/rep.getOrders())*100;
@@ -100,17 +102,15 @@ public class VisitorController {
 	@PutMapping("/bookedTable/{id}")
 	public BookedTable updateBookedTable(@PathVariable("id") BookedTable bookedTableFromDB, @RequestBody BookedTable bookedTable) throws Exception {
 		BeanUtils.copyProperties(bookedTable, bookedTableFromDB, "id");
-		
 		BookedTable updatedBookedTable = bookedTableServiceImpl.createBookedTable(bookedTableFromDB);
-
         wsSender.accept(EventType.UPDATE, updatedBookedTable);
-
+        
         return updatedBookedTable;
 	}
 	
 	
 	@PutMapping("profile")
-	public User updateProfile(@RequestBody User user) throws Exception {
+	public User updateProfile(@Valid @RequestBody User user) throws Exception {
 		return userRepository.save(user);
 	}
 

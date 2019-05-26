@@ -3,7 +3,7 @@ package iful.edu.bg.service;
 
 import java.util.List;
 
-import iful.edu.bg.model.Establishment;
+import iful.edu.bg.entity.Establishment;
 
 public interface EstablishmentService {
 
