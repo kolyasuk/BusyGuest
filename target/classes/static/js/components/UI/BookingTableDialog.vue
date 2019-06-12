@@ -1,5 +1,5 @@
 <template>
-		<v-dialog v-model="dialog" width="500">
+		<v-dialog v-model="dialog" width="300">
 					      <template v-slot:activator="{ on }"> 
 						      <v-btn color="red lighten-2" dark v-on="on">
 							      <span >Замовити</span>
@@ -8,7 +8,7 @@
 					
 					      <v-card>
 					        <v-card-title class="headline grey lighten-2" primary-title>
-					          <span>Завомити столик № {{table.tableNum}}</span>
+					          <span style="font-size: 20px">Замовити столик № {{table.tableNum}}</span>
 					          <v-spacer></v-spacer>
 					          <v-btn color="primary" fab small dark @click="dialog = false">
 					              <v-icon>close</v-icon>

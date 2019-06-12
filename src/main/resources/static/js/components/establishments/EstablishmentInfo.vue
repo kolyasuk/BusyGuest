@@ -83,5 +83,6 @@
 
 .estb-info{
 	font-size: 18px;
+	padding-left: 20px !important;
 }
 </style>

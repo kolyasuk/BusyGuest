@@ -5,8 +5,11 @@
 		<router-link :to="`/bookedTable/`+`${bookedTable._id}`">
 		<span @click="reloadBookedTableComponent(bookedTable._id)">{{bookedTable.estb.name}}
 			{{bookedTable.bookedOn | moment("MM/DD/YYYY HH:mm ")}}</span> </router-link>
-		<input type="button" value="Delete"
-			@click="deleteBook(bookedTable, index)">
+
+            <v-btn flat icon color="red" @click="deleteBook(bookedTable, index)">
+              <v-icon color="red lighten-2">delete</v-icon>
+            </v-btn>
+		
 	</div>
 </div>
 </template>
@@ -23,12 +26,12 @@
                 userBookedTables:[]
             }
         }, 
-        computed: mapState(['profile','role'/* ,'userBookedTables' */]),
+        computed: mapState(['profile','role' ,'userBookedTables']),
         created(){
             this.loadBoockedTables(this.profile.id)
         },
         methods:{
-/*         	...mapActions(['getUserBookedTablesAction']), */
+         	...mapActions(['getUserBookedTablesAction']),
             deleteBook(bookedTable, index){
             	const currentRoute = this.$route.path
             	if(currentRoute.includes('bookedTable'))
@@ -38,7 +41,7 @@
                 EventBus.$emit('user-book-deleted')
             },
             loadBoockedTables(userId){
-/* 				this.getUserBookedTablesAction(userId) */
+ 				this.getUserBookedTablesAction(userId)
                 this.$resource('/'+this.role.toLowerCase()+'{/userId}/userBookedTable').get({userId:this.profile.id}).then(result =>
                 result.json().then(data => this.userBookedTables = data))
 

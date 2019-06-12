@@ -23,11 +23,7 @@
 		</template>
       <v-card>
         <v-card-title class="headline grey lighten-2" primary-title>
-			<span>Видалити столик № {{table.tableNum}}</span>
-			<v-spacer></v-spacer>
-			<v-btn color="primary" fab small dark @click="dialog = false">
-				<v-icon>close</v-icon>
-			</v-btn>
+			<span>Видалити столик №{{table.tableNum}}</span>
 		</v-card-title>
 		
         <v-card-text>
@@ -79,7 +75,7 @@
 
 <style scoped>
 .table-badge{
-    bottom: 0px;
+    bottom: 10px;
     right: 10px;
     position: absolute;
     z-index: 1;

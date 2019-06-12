@@ -15,39 +15,14 @@
 					@resizing="onResize" 
 					:parent="true"
 					:active.sync="active"
+					class="table"
 					>				
 
 				    <table-details-dialog :table="table"></table-details-dialog>
 				    <edit-table-dialog :table="table"></edit-table-dialog>
 				    <delete-table-dialog :table="table"></delete-table-dialog>
-					<div class="chair" v-for="chair in table.seats" :key="chair">{{chair}}</div>
 				</vue-draggable-resizable>
 				
-				
-		
-		
-				
-			
-<!-- 				<v-expansion-panel-content :style="tableBooked">
-
-		            <template v-slot:header>
-		              <div>Стіл №{{table.tableNum}}</div>
-		            </template>
-		            
-		            <v-card max-width="350">
-		              <v-card-text >
-		              	<booked-tables-list :bookedTables="bookedTables" :table="table"></booked-tables-list>
-		              	
-							<booking-table-dialog v-if="role=='VISITOR'" :table="table"></booking-table-dialog>
-
-				            <div v-if="role=='ESTB'" class="text-xs-center">									
-								<edit-table-dialog :table="table"></edit-table-dialog>
-								<delete-table-dialog :table="table"></delete-table-dialog>
-							</div>
-		              </v-card-text>
-		            </v-card>
-	          </v-expansion-panel-content> -->
-
 
 </template>
 
@@ -174,6 +149,7 @@
 	margin: auto;
 	margin-left:45px;
 	position: relative;
+	border: 1px solid red;
 }
 
 .box{
@@ -190,30 +166,6 @@
     color: #272727;
     font-family: Consolas,Courier New,Lucida Console;
     border-radius: 4px;
-}
-
-.chair{
-	position: absolute;
-}
-
-.chair:nth-child(1n){
-    top: 5px;
-    right: -13px;
-}
-
-.chair:nth-child(2n){
-    top: 5px;
-    left: -13px;
-}
-
-.chair:nth-child(3n){
-    top: 25px;
-    right: 10px;
-}
-
-.chair:nth-child(4n){
-    top: -25px;
-    left: 10px;
 }
 
 .dragging{

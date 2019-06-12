@@ -1,8 +1,9 @@
 <template>
     <div>
-		Номер: <input type="number" min=1 placeholder="number.." v-model="tableNum" /><br>
-        Кількість місць: <input type="number" min=1 placeholder="seats.." v-model="seats" />
-        <input type="button" value="Save" @click="saveTable()" />
+    	<span style="font-size: 18px;"><b>Додати столик:</b></span><br>
+		Номер: <input style="border: 2px solid #87CEFA; width: 40px;" type="number" min=1 placeholder="number.." v-model="tableNum" /><br>
+        Кількість місць: <input style="border: 2px solid #87CEFA; width: 40px;" type="number" min=1 placeholder="seats.." v-model="seats" />
+        <v-btn color="success" @click="saveTable()">Зберегти</v-btn>
     </div>
 </template>
 
@@ -15,7 +16,7 @@
     	props:['table','establishment'],
         data(){
             return {
-            	id: null,
+            	_id: null,
                 tableNum: 1,
                 seats: 1,
                 estb: null
@@ -23,7 +24,7 @@
         },
         created: function(){
         	if(this.table){
-	        	this.id = this.table._id 
+	        	this._id = this.table._id 
 	            this.tableNum = this.table.tableNum
 	            this.seats = this.table.seats
 	            this.estb = this.table.estb
@@ -42,7 +43,7 @@
 	            	estb: this.estb 
 	            }
 	            
-	            if(this.id){
+	            if(this._id){
 	            	const result = await tablesApi.update(table)
 		        	const data = await result.json()
 		        	
@@ -60,7 +61,7 @@
 	                          width:48,
 	                          height:48
 	                  }     
-	                this.setTablesCoordinates([this.table._id, tablesCoordinatesObj])
+	                this.setTablesCoordinates([table._id, tablesCoordinatesObj])
 	                this.$resource('/estb/establishment{/id}/coordinates').save({id:this.$route.params.id}, this.estbCoordinates)
 	            }
 	            EventBus.$emit('dialog-close')

@@ -17,17 +17,13 @@
 		               :ripple="false"
 		               @click="dialog = true"
 		               >
-		          <v-icon style="font-size: 20px" color="green darken-2">border_color</v-icon>
+		          <v-icon style="font-size: 20px" color="green darken-2">edit</v-icon>
 		        </v-btn>
 		      </v-badge>
 		</template>
       <v-card>
         <v-card-title class="headline">
-	        <span>Редагувати столик № {{table.tableNum}}</span>
-	        <v-spacer></v-spacer>
-			<v-btn color="primary" fab small dark @click="dialog = false">
-				<v-icon>close</v-icon>
-			</v-btn>
+	        <span>Редагувати столик №{{table.tableNum}}</span>
         </v-card-title>
 		
         <v-card-text>
@@ -39,20 +35,13 @@
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <v-btn
-            color="green darken-1"
-            flat="flat"
-            @click="dialog = false"
-          >
-            Disagree
-          </v-btn>
 
           <v-btn
             color="green darken-1"
             flat="flat"
             @click="dialog = false"
           >
-            Agree
+           Закрити
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -92,7 +81,7 @@
 
 <style scoped>
 .table-badge{
-    top: 0px;
+    top: -5px;
     right: 10px;
     position: absolute;
     z-index: 1;

@@ -43,7 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			hasAnyAuthority("VISITOR", "ESTB").
 			antMatchers("/admin/user/{id}/bussines").hasAnyAuthority("VISITOR","ADMIN").
 			antMatchers("/estb/establishment/**", "/estb/establishment/{id}/coordinates").hasAnyAuthority("VISITOR","ADMIN", "ESTB").
-			antMatchers("/visitor/**").hasAuthority("VISITOR").
+			antMatchers("/visitor/**").hasAnyAuthority("VISITOR").
 			antMatchers("/admin/**").hasAuthority("ADMIN").
 			antMatchers("/estb/**").hasAuthority("ESTB").
 			anyRequest().authenticated().and()

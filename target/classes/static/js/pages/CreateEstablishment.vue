@@ -1,8 +1,8 @@
 <template>
-    <v-app>
+    <v-app >
 	    <div v-if="role=='ESTB'">
 	    	<div v-if="profileEstb == null">
-			    Привіт! Ще не подав заявку закладу? Зроби це просто зараз!
+			    <h2><b>Заповніть дані про заклад за допомогою даної форми, та надішліть заявку на розгляд адміністріції.</b></h2>
 			    
 			    <establishment-form></establishment-form>
 		    </div>

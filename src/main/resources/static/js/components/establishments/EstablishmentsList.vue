@@ -1,5 +1,6 @@
 <template>
    
+
 	<v-flex xs12 sm6 offset-sm3>
 		<h2>Список закладів</h2>
 		<v-list two-line>
@@ -19,7 +20,7 @@
         components: {
             EstablishmentRow
         },
-        computed: mapState(['establishments','role']),
+        computed: mapState(['establishments','role', 'profile']),	
         data(){
             return{
                 establishment: null

@@ -1,27 +1,28 @@
 <template>
     <v-app>
     	<div v-if="role=='ADMIN'">
-    		<v-btn @click="acceptEstablishment">{{establishment.accepted ? 'Заховати' : 'Підтвердити'}}</v-btn>
+    		<h2><b>Заклад {{establishment.accepted ? '' : 'не'}} опубліковано! </b></h2>
+    		<v-btn color="red lighten-2" @click="acceptEstablishment" dark> {{establishment.accepted ? 'Відмінити підтвердження' : 'Підтвердити'}}</v-btn>
     	</div>
     	<div v-if="establishment.show || role!='VISITOR'">
 			<div v-if="role==='ESTB' && profile.email!=establishment.email">
-		        	Не ваш заклад!	
+		        	<b>Не ваш заклад!</b>	
 		    </div>
 		     <div v-else>
 		     	<div v-if="role==='ESTB' && establishment.accepted">
 		     		
 			     	<div v-if="!establishment.show">
-	    				<h3>Заклад не оприлюднено! Після заповнення всієї інформації, не забудьте опублікувати!</h3>
-	    				<input type="button" @click="changeShowStatus()" value="Опублікувати">
+	    				<h3><b>Заклад не оприлюднено! Опублікуйте після заповнення інформації!</b></h3>
+	    				<v-btn color="red lighten-2" @click="changeShowStatus()" dark>Опублікувати</v-btn>
 	    			</div>
 	    			<div v-else>
-	    				<h3>Заклад оприлюднено ^ ^</h3>
-	    				<input type="button" @click="changeShowStatus()" value="Заховати">
+	    				<h3><b>Заклад оприлюднено.</b></h3>
+	    				<v-btn color="red lighten-2" @click="changeShowStatus()" dark>Заховати</v-btn>
 	    			</div>
     			</div>
     			
     			<div v-if="role==='ESTB' && !establishment.accepted">
-    				<h3>Заклад знаходиться на розгляді в адміністрації!</h3>
+    				<h3><b>Заклад знаходиться на розгляді в адміністрації!</b></h3>
     			</div>
 		        <div>
 				<div style="text-align: center;">
@@ -52,7 +53,7 @@
 						  </v-container>
 			
 		        	</div>
-				<h3>Замовити столик: </h3>
+				<h2 style="text-align: center;"><b>Замовити столик:</b></h2>
 
 		        <tables-list :establishment="establishment"></tables-list>
 		    </div>
@@ -81,6 +82,17 @@
                  editClickCount: 0,
                  editElementValue:'',
                 establishment: null,
+                items: [
+                    {
+                      src: 'https://media-cdn.tripadvisor.com/media/photo-o/0c/9f/ce/c5/photo0jpg.jpg'
+                    },
+                    {
+                      src: 'https://media-cdn.tripadvisor.com/media/photo-o/07/b8/1a/21/extraordinary-pizza-atmosphere.jpg'
+                    },
+                    {
+                      src: 'https://media-cdn.tripadvisor.com/media/photo-o/07/b8/1a/35/extraordinary-pizza-atmosphere.jpg'
+                    }
+                  ]
              }
         },
         computed: mapState(['profile','establishments','role']),
@@ -131,7 +143,7 @@
                     this.editClickCount=0;
                     
                     if(this.editElementValue!=this.establishment.name){
-                        console.log("Збираю об'єкт і шлю на сервер")
+                        establishmentApi.update(this.establishment)
                     }
                     this.editElementValue=''
                 }

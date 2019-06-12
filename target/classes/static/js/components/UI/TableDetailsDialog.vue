@@ -1,15 +1,18 @@
 <template>
-		<v-dialog
+ 	<v-dialog
 	      v-model="dialog"
 	      max-width="290"
 	    >
 	    <template v-slot:activator="{ on }"> 
-			<v-btn depressed color="brown darken-1" large class="tableButton" @click="openTableDetails">{{table.tableNum}}</v-btn>
+			<v-btn depressed color="#E5C182" large class="tableButton" @click="openTableDetails"><span style="font-size: 20px;"><b>{{table.tableNum}}</b></span></v-btn>
 		</template>
       <v-card>
-        <v-card-title class="headline">Деталі столика</v-card-title>
+        <v-card-title class="headline">Деталі столика
+                <span style="font-size: 16px;"><b>Кількість місць: {{table.seats}}</b></span>
+        </v-card-title>
 
         <v-card-text>
+
         <booked-tables-list :bookedTables="bookedTables" :table="table"></booked-tables-list>
           
         <booking-table-dialog v-if="role=='VISITOR'" :table="table"></booking-table-dialog>
@@ -18,24 +21,18 @@
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <v-btn
-            color="green darken-1"
-            flat="flat"
-            @click="dialog = false"
-          >
-            Disagree
-          </v-btn>
 
           <v-btn
             color="green darken-1"
             flat="flat"
             @click="dialog = false"
           >
-            Agree
+            Закрити
           </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
+    
 </template>
 
 <script>
@@ -56,7 +53,7 @@
         data(){
             return {
                 bookedTables: null,
-            	dialog: false,
+            	dialog: false
 
             }
         },

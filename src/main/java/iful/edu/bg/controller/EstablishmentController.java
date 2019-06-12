@@ -50,12 +50,12 @@ public class EstablishmentController {
 	}
 	
 	@PostMapping("establishment")
-	public Establishment createEstablishment(@Valid @RequestBody Establishment establishment) throws Exception {
+	public Establishment createEstablishment( @RequestBody Establishment establishment) throws Exception {
 		return establishmentServiceImpl.createEstablishment(establishment);
 	}
 	
 	@PutMapping("establishment/{id}")
-	public Establishment updateEstablishment(@PathVariable("id") Establishment establishmentFromDB, @Valid @RequestBody Establishment establishment) {
+	public Establishment updateEstablishment(@PathVariable("id") Establishment establishmentFromDB, @RequestBody Establishment establishment) {
 		return establishmentServiceImpl.updateEstablishment(establishmentFromDB, establishment);
 	}
 	
@@ -88,7 +88,7 @@ public class EstablishmentController {
 	}
 	
 	@PutMapping("establishment/table/{id}")
-	public Table updateTable(@PathVariable("id") Table tableFromDB, @Valid @RequestBody Table table) throws Exception {
+	public Table updateTable(@PathVariable("id") Table tableFromDB,  @RequestBody Table table) throws Exception {
 		return tableServiceImpl.updateTable(tableFromDB, table);
 	}
 	

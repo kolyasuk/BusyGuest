@@ -21,7 +21,7 @@
       	 <div v-else>
             <v-list-tile :key="establishment.name" avatar @click="goToEstb">
               <v-list-tile-avatar>
-                <img :src="profile.userpic">
+              	<img src="https://s.sakh.com/i/y/eda/3/6/1/d/361d6cd4e62f9d9cae3ccddbcb402076.jpg" alt="establishment.name">
               </v-list-tile-avatar>
               <v-list-tile-content>
                 <v-list-tile-title v-html="establishment.name"></v-list-tile-title>

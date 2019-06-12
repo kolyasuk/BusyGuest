@@ -8,12 +8,12 @@
 									<span>Редагувати</span>
 								</v-btn>
 								<div v-show="dragTables" class="tableAreaSettings">
-									<v-btn color="red lighten-2" @click="createToilet" dark>
+<!-- 									<v-btn color="red lighten-2" @click="createToilet" dark>
 										<span>+WC</span>
 									</v-btn>
 									<v-btn color="red lighten-2" @click="signs.set()" dark>
 										<span>+EXIT</span>
-									</v-btn>
+									</v-btn> -->
 									<v-checkbox v-model="editTableArea" :label="'Змінити розмір планування'"></v-checkbox>
 									<table-form ></table-form>
 
@@ -28,8 +28,8 @@
 								    :active="editTableArea" 
 								    :draggable="false" 
 								    :resizable="editTableArea" 
-								    :w="estbCoordinates.width" 
-								    :h="estbCoordinates.height"
+								    :w="1000" 
+								    :h="500"
 								    @resizing="onResize" 
 								    :minWidth="minWidth"
 								    :minHeight="minHeight"
@@ -162,10 +162,10 @@
                 this.y = y
                 this.width = width
                 this.height = height
-
               },
               onDeactivate(){
-            	  EventBus.$emit('tableAreaChanged')
+            	  if(this.dragTables)
+                	  EventBus.$emit('tableAreaChanged')
                   var tempEstbCoordinates = {
                   	...this.estbCoordinates
                   }
@@ -185,9 +185,6 @@
 .areaParrent{
 	height: 700px; 
 	width: 100%; 
-	border: 1px solid red; 
-	position: relative;
-	margin: 0 auto;
 }
 
 

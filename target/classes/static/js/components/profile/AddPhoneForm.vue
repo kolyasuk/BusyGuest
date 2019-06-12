@@ -3,7 +3,7 @@
      <v-text-field 
 	     v-model="phone" 
 	     :error-messages="phoneErrors"
-	     label="Phone" 
+	     label="Номер телефону" 
 	     name="phone" 
 	     mask="(+380) #########" 
 	     required

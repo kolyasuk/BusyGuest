@@ -109,16 +109,22 @@ public class VisitorController {
 	}
 	
 	
+	
 	@PutMapping("profile")
 	public User updateProfile(@Valid @RequestBody User user) throws Exception {
 		return userRepository.save(user);
 	}
 
 	
-	@GetMapping("checkBookedTable/{userId}/{estbId}")
-	public boolean checkActualBookedTable(@PathVariable("userId") String userId, @PathVariable("estbId") String estbId) throws Exception {
+	@GetMapping("checkUserBookedTable/{userId}/{estbId}")
+	public boolean checkActualUserBookedTable(@PathVariable("userId") String userId, @PathVariable("estbId") String estbId) throws Exception {
 		return bookedTableServiceImpl.checkActualBookedTableByEstablishmentId(userId, estbId);
 	}
+	
+	@GetMapping("checkBookedTable/{table}")
+	public List<BookedTable> checkActualBookedTable(@PathVariable("table") String estbId) throws Exception {
+		return bookedTableServiceImpl.getActualBookedTableByTableId(estbId);
+	}	
 	
 
 }

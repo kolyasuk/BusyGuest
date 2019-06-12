@@ -1,7 +1,8 @@
 <template>
     <div >
-    	<div v-if="role=='ADMIN'">
-	    	Адмін панель
+    	<div v-if="role=='ADMIN'" style="text-align: center;">
+	    	<h1>Адмін панель</h1>
+	    	<span>Заявки:</span>
 	    	<div v-for="establishment in establishments" :key="establishment._id">
 	    		<router-link :to="'/establishment/'+`${establishment._id}`">
                 {{establishment.name}}

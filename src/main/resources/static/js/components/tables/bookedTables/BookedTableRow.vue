@@ -2,11 +2,11 @@
     <div>
         <div v-if="role==='ESTB'">
             <router-link :to="`/bookedTable/`+`${bookedTable._id}`">
-                {{bookedTable.bookedOn | moment("MM/DD/YYYY HH:mm ")}} {{bookedTable.accepted}}
+                <span :style="bookedTable.accepted ? 'color:green;': 'color:red'">{{bookedTable.bookedOn | moment("MM/DD/YYYY HH:mm ")}}</span>
             </router-link>
         </div>
         <div v-else>
-            {{bookedTable.bookedOn | moment("MM/DD/YYYY HH:mm ")}} {{bookedTable.accepted}}
+            <span :style="bookedTable.accepted ? 'color:green;': 'color:red'">{{bookedTable.bookedOn | moment("MM/DD/YYYY HH:mm ")}}</span>
         </div>
     </div>
     
