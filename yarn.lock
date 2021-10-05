@@ -3877,10 +3877,10 @@ querystring@0.2.0:
   resolved "https://registry.yarnpkg.com/querystring/-/querystring-0.2.0.tgz#b209849203bb25df820da756e747005878521620"
   integrity sha1-sgmEkgO7Jd+CDadW50cAWHhSFiA=
 
-querystringify@^2.0.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/querystringify/-/querystringify-2.1.0.tgz#7ded8dfbf7879dcc60d0a644ac6754b283ad17ef"
-  integrity sha512-sluvZZ1YiTLD5jsqZcDmFyV2EwToyXZBfpoVOmktMmW+VEnhgakFHnasVph65fOjGPTWN0Nw3+XQaSeMayr0kg==
+querystringify@^2.1.1:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/querystringify/-/querystringify-2.2.0.tgz#3345941b4153cb9d082d8eee4cda2016a9aef7f6"
+  integrity sha512-FIqgj2EUvTa7R50u0rGsyTftzjYmv/a3hO345bZNrqabNqjtgiDMgmo4mkUjd+nzU5oF3dClKqFIPUKybUyqoQ==
 
 randombytes@^2.0.0, randombytes@^2.0.1, randombytes@^2.0.5:
   version "2.1.0"
@@ -4588,6 +4588,11 @@ timers-browserify@^2.0.4:
   dependencies:
     setimmediate "^1.0.4"
 
+tiny-cookie@^1.0:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/tiny-cookie/-/tiny-cookie-1.0.1.tgz#753786079c642a3c3d0b2accad600f8de119ac2a"
+  integrity sha1-dTeGB5xkKjw9CyrMrWAPjeEZrCo=
+
 to-arraybuffer@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/to-arraybuffer/-/to-arraybuffer-1.0.1.tgz#7d229b1fcc637e466ca081180836a7aabff83f43"
@@ -4741,11 +4746,11 @@ url-parse-lax@^3.0.0:
     prepend-http "^2.0.0"
 
 url-parse@^1.4.3:
-  version "1.4.4"
-  resolved "https://registry.yarnpkg.com/url-parse/-/url-parse-1.4.4.tgz#cac1556e95faa0303691fec5cf9d5a1bc34648f8"
-  integrity sha512-/92DTTorg4JjktLNLe6GPS2/RvAd/RGr6LuktmWSMLEOa6rjnlrFXNgSbSmkNvCoL2T028A0a1JaJLzRMlFoHg==
+  version "1.5.3"
+  resolved "https://registry.yarnpkg.com/url-parse/-/url-parse-1.5.3.tgz#71c1303d38fb6639ade183c2992c8cc0686df862"
+  integrity sha512-IIORyIQD9rvj0A4CLWsHkBBJuNqWpFQe224b6j9t/ABmquIS0qDU2pY6kl6AuOrL5OkCXHMCFNe1jBcuAggjvQ==
   dependencies:
-    querystringify "^2.0.0"
+    querystringify "^2.1.1"
     requires-port "^1.0.0"
 
 url-to-options@^1.0.1:
@@ -4825,6 +4830,18 @@ vm-browserify@0.0.4:
   dependencies:
     indexof "0.0.1"
 
+vue-cookie@^1.1.4:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/vue-cookie/-/vue-cookie-1.1.4.tgz#b8b46d112bda9f93a2f47017c2ed5282d2064fda"
+  integrity sha1-uLRtESvan5Oi9HAXwu1SgtIGT9o=
+  dependencies:
+    tiny-cookie "^1.0"
+
+vue-draggable-resizable@^2.0.0-rc1:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/vue-draggable-resizable/-/vue-draggable-resizable-2.3.0.tgz#94c433ca748bc1a4d0959ba1c5c0e1c3536cee5b"
+  integrity sha512-77CLRj1TPwB30pwsjOf3pkd1UzYanCdKXbqhILJ0Oo5QQl50lvBfyQCXxMFzwWwTc3sbBbQH3FfWSV+BkoSElA==
+
 vue-hot-reload-api@^2.3.0:
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.3.tgz#2756f46cb3258054c5f4723de8ae7e87302a1ccf"
@@ -4885,6 +4902,11 @@ vue@^2.6.8:
   version "2.6.8"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.8.tgz#f21cbc536bfc14f7d1d792a137bb12f69e60ea91"
   integrity sha512-+vp9lEC2Kt3yom673pzg1J7T1NVGuGzO9j8Wxno+rQN2WYVBX2pyo/RGQ3fXCLh2Pk76Skw/laAPCuBuEQ4diw==
+
+vuelidate@^0.7.4:
+  version "0.7.6"
+  resolved "https://registry.yarnpkg.com/vuelidate/-/vuelidate-0.7.6.tgz#84100c13b943470660d0416642845cd2a1edf4b2"
+  integrity sha512-suzIuet1jGcyZ4oUSW8J27R2tNrJ9cIfklAh63EbAkFjE380iv97BAiIeolRYoB9bF9usBXCu4BxftWN1Dkn3g==
 
 vuetify@^1.5.14:
   version "1.5.14"
